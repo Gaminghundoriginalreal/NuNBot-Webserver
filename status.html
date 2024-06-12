@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .status-container {
+            text-align: center;
+            border: 2px solid #61dafb;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #20232a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-container h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .status-container p {
+            font-size: 1.5em;
+            margin: 10px 0 0;
+        }
+
+        .status-online {
+            color: #4caf50;
+        }
+
+        .status-offline {
+            color: #f44336;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .logo img {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <a href="https://nunbot.gaminghund.de">
+            <img src="https://nunbot.gaminghund.de/background.png" alt="Logo">
+        </a>
+    </div>
+
+    <div class="status-container">
+        <h1>Discord Bot Status</h1>
+        <p id="status-message">Checking status...</p>
+    </div>
+
+    <script>
+        async function checkBotStatus() {
+            try {
+                const response = await fetch('https://discord.com/oauth2/authorize?client_id=1246839043048603708&permissions=8&integration_type=0&scope=bot+applications.commands', {
+                    method: 'HEAD'
+                });
+
+                const statusMessage = document.getElementById('status-message');
+                
+                if (response.ok) {
+                    statusMessage.textContent = "The bot is online!";
+                    statusMessage.classList.add('status-online');
+                    statusMessage.classList.remove('status-offline');
+                } else {
+                    statusMessage.textContent = "The bot is offline!";
+                    statusMessage.classList.add('status-offline');
+                    statusMessage.classList.remove('status-online');
+                }
+            } catch (error) {
+                const statusMessage = document.getElementById('status-message');
+                statusMessage.textContent = "Error checking status!";
+                statusMessage.classList.add('status-offline');
+                statusMessage.classList.remove('status-online');
+            }
+        }
+
+        checkBotStatus();
+    </script>
+</body>
+</html>
